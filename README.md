@@ -25,22 +25,15 @@ Project Organization
       │   └── trainmodelconfig/              <- Model training configuration files.
       │
       ├── data/                              <- Data path.
-      │   ├── DETRAC_Upload/                 <- Data train/val.
-      │   └──  prepare/                       <- Data preparation scripts.
+      │   └── DETRAC_Upload/                 <- Data train/val.
       ├── src/                               <- Source code.
       │   ├── callbacks/                     <- Callback functions for training.
       │   ├── export/                        <- Export scripts.
-      │   ├── inference/                     <- Inference scripts with slice lib.
-      │   ├── mlflow_tracking/               <- MLflow tracking scripts.
+      │   ├── inference/                     <- Inference scripts
       │   ├── settings_update/               <- Settings update scripts.
       │   ├── utils/                         <- Utility functions and scripts.
       │   └── trainer.py                     <- Trainer module.
       │
-      ├── tests/                             <- Tests.
-      │   ├── data/                          <- Data tests.
-      │   ├── inference/                     <- Inference tests.
-      │
-      ├── ultralytics/                       <- Ultralytics-specific code or configurations.
       └── train.py                           <- Main training script.
 
 --------
@@ -51,24 +44,21 @@ To start train you should to prepare 3 config files:
 <h3 id="subsection1">Train Data Config</h3>
 
 ```yaml
-path: shared_data
-train:
-  - 'Tagil/data/autosplit_train.txt'
-val:
-  - 'Tagil/data/autosplit_val.txt'
+path: /Users/avlasov/PycharmProjects/CarDetection/data/DETRAC_Upload
+train: 'images/train'
+val: 'images/val'
 
-nc: 1
-names:
-  0: 'build'
+nc: 4
+names: ["car", "bus", "van", "other"]
 ```
 
 Where:
 
 - <u>path</u> - your data path from home dir
-- <u>train</u> - your autosplit train data in txt format
-- <u>val</u> - your autosplit val data in txt format
+- <u>train</u> - your train data
+- <u>val</u> - your val data
 - <u>nc</u> - count classes in your dataset
-- <u>names</u> - dict classes ("id":"name")
+- <u>names</u> - list classes
 
 <h3 id="subsection2">Train Model Config</h3>
 
@@ -77,54 +67,53 @@ training_params:
 
   # Train params
 
-  model: yolov8x-seg.pt
-  data: /files/private_data/modeling-yolov8/configs/traindataconfigs/data_Tagil.yaml
-  imgsz: 1024 
-  epochs: 11 
-  patience: 10 
-  batch: 32 
-  device: [2, 6] 
-  workers: 12 
-  optimizer: AdamW 
-  seed: 12345 
-  cos_lr: True 
-  lr0: 0.0006 
-  lrf: 0.00008 
-  momentum: 0.98 
-  weight_decay: 0.00005 
-  warmup_epochs: 1 
-  warmup_momentum: 0.6 
-  warmup_bias_lr: 0.1 
-  box: 9.5 
-  dfl: 1.5 
-  cls: 0.5 
-  project: modeling_yolo
-  task: segment
-  name: Tagil_base_exp_1 
-  close_mosaic: 0 
-  freeze: 8 
-  mode: train 
-  single_cls: True 
-  amp: False 
-  dropout: 0.1
-  augment: False
+  model: yolov8n.pt # path to model file, i.e. yolov8n.pt, yolov8n.yaml
+  data: /Users/avlasov/PycharmProjects/CarDetection/configs/traindataconfigs/data_CARS.yaml # path to data file, i.e. coco128.yaml
+  imgsz: 640 # size of input images as integer
+  epochs: 5 # number of epochs to train for
+  patience: 5 # epochs to wait for no observable improvement for early stopping of training
+  batch: 8 # number of images per batch (-1 for AutoBatch)
+  device: cpu # device to run on, i.e. cuda device=0 or device=0,1,2,3 or device=cpu
+  workers: 10 # number of worker threads for data loading (per RANK if DDP)
+  optimizer: AdamW # optimizer to use, choices=[SGD, Adam, Adamax, AdamW, NAdam, RAdam, RMSProp, auto]
+  seed: 12345 # random seed for reproducibility
+  cos_lr: True # use cosine learning rate scheduler
+  lr0: 0.0001 # initial learning rate (i.e. SGD=1E-2, Adam=1E-3)
+  lrf: 0.00001 # final learning rate (lr0 * lrf)
+  momentum: 0.98 # SGD momentum/Adam beta1
+  weight_decay: 0.005 # optimizer weight decay 5e-4
+  warmup_epochs: 1 # warmup epochs (fractions ok)
+  warmup_momentum: 0.5 # warmup initial momentum
+  warmup_bias_lr: 0.15 # warmup initial bias lr
+  box: 10 # box loss gain
+  dfl: 1.5 # dfl loss gain
+  cls: 0.5 # cls loss gain (scale with pixels)
+  project: CARS
+  task: detect
+  name: cars_exp_1 # experiment name
+  close_mosaic: 0 # (int) disable mosaic augmentation for final epochs (0 to disable)
+  freeze: 9 # (int or list, optional) freeze first n layers, or freeze list of layer indices during training
+  mode: train # mode
+  single_cls: False # train multi-class data as single-class
+  amp: False # Automatic Mixed Precision (AMP) training, choices=[True, False]
+  dropout: 0.09
 
   # Augmentation params
 
-  hsv_h: 0.01  
-  hsv_s: 0.3 
-  hsv_v: 0.1  
-  degrees : 30  
-  translate: 0.3  
-  scale: 0.4  
-  shear: 0.3  
-  perspective: 0.1 
-  flipud: 0.5  
-  fliplr: 0.5  
-  mosaic: 0.1  
-  mixup: 0.1  
-  copy_paste: 0  
-  erasing: 0.3
+  hsv_h: 0.01  # image HSV-Hue augmentation (fraction)
+  hsv_s: 0.5 # image HSV-Saturation augmentation (fraction)
+  hsv_v: 0.1  # image HSV-Value augmentation (fraction)
+  degrees : 30  # image rotation (+/- deg)
+  translate: 0.1  # image translation (+/- fraction)
+  scale: 0.2  # image scale (+/- gain)
+  shear: 0.2  # image shear (+/- deg) from -0.5 to 0.5
+  # perspective: 0.1  # image perspective (+/- fraction), range 0-0.001
+#  flipud: 0.5  # image flip up-down (probability)
+#  fliplr: 0.5  # image flip left-right (probability)
+  mosaic: 0.1  # image mosaic (probability)
+  mixup: 0.01  # image mixup (probability)
+  copy_paste: 0  # segment copy-paste (probability)
+  erasing: 0.2
 ```
 
 Training params:
@@ -273,25 +262,6 @@ Command Line Arguments:
         --yolo_retina_masks: Boolean indicating whether to use retina masks.
 
 ```python src/inference/predict.py --best_model_path path/to/model_weights.pt --path_image_predict path/to/image.jpg --save_results_path path/to/save/results --data_experiment_name my_experiment --save_segmentations_json True --yolo_conf 0.4 --yolo_iou 0.5 --yolo_agnostic_nms True --yolo_max_det 2000 --yolo_imgsz 1024 --yolo_show_labels False --yolo_show_conf False --yolo_show_boxes False --yolo_line_width 1 --yolo_augment True --yolo_retina_masks True```
-
-## Inference with custom slice-lib
-
-### Overview
-This script is designed to perform slice-based object detection using a pre-trained YOLOv8 model. It takes an image, splits it into smaller slices with specified overlap, runs the YOLOv8 model on each slice to detect objects, and combines the results into a single output image.
-
-### Example usage
-Command Line Arguments:
-
-    --model_path: Path to the pre-trained YOLOv8 model weights.
-    --image_path: Path to the image on which to run the predictions.
-    --output_results_path: Directory where the results will be saved.
-    --split_size: Size of the image slices.
-    --overlap: Overlap ratio between slices.
-    --conf: Confidence threshold for the YOLOv8 model.
-    --iou: Intersection over Union threshold for the YOLOv8 model.
-    --display: Boolean indicating whether to display the result image.
-
-```python slice_predict.py --model_path path/to/model_weights.pt --image_path path/to/image.jpg --output_results_path path/to/save/results --split_size 1024 --overlap 0.6 --conf 0.5 --iou 0.6 --display True```
 
 ## Export
 
