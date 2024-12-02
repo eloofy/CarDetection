@@ -1,0 +1,8 @@
+/data/
+/src/data/
+/src/export/
+/src/regmnk/
+/src/mlflow_tracking/
+/src/inference/images/
+/src/inference/results/
+/src/inference/slice_lib/
