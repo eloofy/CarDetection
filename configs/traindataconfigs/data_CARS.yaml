@@ -1,0 +1,8 @@
+path: /Users/avlasov/PycharmProjects/CarDetection/data/DETRAC_Upload
+train: 'images/train'
+val: 'images/val'
+
+nc: 4
+names: ["car", "bus", "van", "other"]
+
+
