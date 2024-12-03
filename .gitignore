@@ -6,3 +6,4 @@
 /src/inference/results/
 /src/inference/slice_lib/
 /src/export/
+makefile
