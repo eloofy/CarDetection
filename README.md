@@ -5,7 +5,7 @@
 
 ## Установка зависимостей
 ```shell
-run_install.bat
+.\run_install.bat
 ```
 
 Организация проекта

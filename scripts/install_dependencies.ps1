@@ -38,8 +38,10 @@ if (-not $pipCheck) {
 $poetryCheck = Get-Command poetry -ErrorAction SilentlyContinue
 if (-not $poetryCheck) {
     Write-Host "Poetry not found. Installing Poetry..."
-    $installPoetryResult = Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing | python -
+    $installPoetryResult = Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing | Out-File ".\install-poetry.py"
+    python ".\install-poetry.py"
     Check-Error $LASTEXITCODE "Error while installing Poetry"
+    Remove-Item ".\install-poetry.py"
 } else {
     Write-Host "Poetry is already installed"
 }
