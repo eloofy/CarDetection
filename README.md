@@ -1,47 +1,39 @@
 # YOLOv8Baseline
 
-## Data Information 
+## Данные
 1. DETRAC
 
-## Data prepare
-All scripts and README in `data/`
-
-## Install
+## Установка зависимостей
 ```shell
-make install
-```
-Other commands:
-```shell
-make help
+run_install.bat
 ```
 
-Project Organization 
+Организация проекта
 ------------
 
     modeling-yolov8/
       ├── configs/
-      │   ├── traindataconfigs/              <- Training data configuration files.
-      │   ├── trainerconfigs/                <- Trainer configuration files.
-      │   └── trainmodelconfig/              <- Model training configuration files.
+      │   ├── traindataconfigs/              <- конфигурация дынных
+      │   ├── trainerconfigs/                <- конфигурация трейнера
+      │   └── trainmodelconfig/              <- конфигурация модели
       │
-      ├── data/                              <- Data path.
-      │   └── DETRAC_Upload/                 <- Data train/val.
-      ├── src/                               <- Source code.
-      │   ├── callbacks/                     <- Callback functions for training.
-      │   ├── export/                        <- Export scripts.
-      │   ├── inference/                     <- Inference scripts
-      │   ├── settings_update/               <- Settings update scripts.
-      │   ├── utils/                         <- Utility functions and scripts.
-      │   └── trainer.py                     <- Trainer module.
+      ├── data/                              <- данные
+      │   └── DETRAC_Upload/                 <- датасет
+      ├── src/                               <- код фреймворка
+      │   ├── callbacks/                     <- callback функции
+      │   ├── inference/                     <- предскащание с готовой моделью
+      │   ├── settings_update/               <- обновление настроек yolo
+      │   ├── utils/                         <- утилиты и скрипты
+      │   └── trainer.py                     <- модель с YOLOv8
       │
-      └── train.py                           <- Main training script.
+      └── train.py                           <- онсовной скрипт запуска обучения
 
 --------
 
-## Example usage train
-To start train you should to prepare 3 config files:
+## Пример настройки обучения
+Для старта обучения необходимо настроить 3 файла:
 
-<h3 id="subsection1">Train Data Config</h3>
+<h3 id="subsection1">Настройка конфига данных</h3>
 
 ```yaml
 path: /Users/avlasov/PycharmProjects/CarDetection/data/DETRAC_Upload
@@ -52,15 +44,15 @@ nc: 4
 names: ["car", "bus", "van", "other"]
 ```
 
-Where:
+Где:
 
-- <u>path</u> - your data path from home dir
-- <u>train</u> - your train data
-- <u>val</u> - your val data
-- <u>nc</u> - count classes in your dataset
-- <u>names</u> - list classes
+- <u>path</u> - путь к датасету
+- <u>train</u> - путь к папке с тренировочными данными
+- <u>val</u> - путь к папке с валидационными данными
+- <u>nc</u> - количество классов в датасете
+- <u>names</u> - именна классов
 
-<h3 id="subsection2">Train Model Config</h3>
+<h3 id="subsection2">Настройка конфига модели</h3>
 
 ```yaml
 training_params:
@@ -116,58 +108,59 @@ training_params:
   erasing: 0.2
 ```
 
-Training params:
+Параметры обучения:
 
-- <u>model</u> - path to model file
-- <u>data</u> - path to the dataset configuration file
-- <u>imgsz</u> - size of the input images (width and height)
-- <u>epochs</u> - number of epochs to train the model
-- <u>patience</u> - number of epochs to wait for improvement before early stopping
-- <u>batch</u> - batch size for training
-- <u>device</u> - list of GPU devices to use for training
-- <u>workers</u> - number of worker threads for data loading
-- <u>optimizer</u> - optimizer to use for training
-- <u>seed</u> - random seed for reproducibility
-- <u>cos_lr</u> - whether to use cosine learning rate scheduling (else lin)
-- <u>lr0</u> - initial learning rate
-- <u>lrf</u> - final learning rate
-- <u>momentum</u> - momentum parameter for the optimizer
-- <u>weight_decay</u> - weight decay (L2 regularization) parameter
-- <u>warmup_epochs</u> - number of warmup epochs at the beginning of training
-- <u>warmup_momentum</u> - initial momentum during warmup
-- <u>warmup_bias_lr</u> - initial learning rate for biases during warmup
-- <u>box</u> - box regression loss weight
-- <u>dfl</u> 1.5 - distance focal loss weight
-- <u>cls</u> 0.5 - classification loss weight
-- <u>project</u> - project name (clearml, mlflow) or path where to save results
-- <u>task</u> - task type
-- <u>name</u> - experiment name
-- <u>close_mosaic</u> - whether to disable mosaic augmentation
-- <u>freeze</u> 8 - number of layers to freeze during training
-- <u>mode</u> train - mode of operation (train, val)
-- <u>single_cls</u> True - whether to treat all classes as a single class
-- <u>amp</u> False - whether to use Automatic Mixed Precision (AMP) for training
-- <u>dropout</u> - dropout rate
+- <u>model</u> - путь к файлу модели  
+- <u>data</u> - путь к файлу конфигурации набора данных  
+- <u>imgsz</u> - размер входных изображений (ширина и высота)  
+- <u>epochs</u> - количество эпох для обучения модели  
+- <u>patience</u> - количество эпох ожидания улучшения перед ранней остановкой  
+- <u>batch</u> - размер батча для обучения  
+- <u>device</u> - список GPU-устройств для использования в обучении  
+- <u>workers</u> - количество потоков для загрузки данных  
+- <u>optimizer</u> - оптимизатор для обучения  
+- <u>seed</u> - случайное зерно для воспроизводимости  
+- <u>cos_lr</u> - использовать ли косинусное изменение скорости обучения (иначе линейное)  
+- <u>lr0</u> - начальная скорость обучения  
+- <u>lrf</u> - конечная скорость обучения  
+- <u>momentum</u> - параметр момента для оптимизатора  
+- <u>weight_decay</u> - параметр регуляризации (L2)  
+- <u>warmup_epochs</u> - количество эпох разогрева в начале обучения  
+- <u>warmup_momentum</u> - начальный момент во время разогрева  
+- <u>warmup_bias_lr</u> - начальная скорость обучения для смещений во время разогрева  
+- <u>box</u> - вес функции потерь для регрессии боксов  
+- <u>dfl</u> 1.5 - вес функции потерь для дистанционного фокуса  
+- <u>cls</u> 0.5 - вес функции потерь для классификации  
+- <u>project</u> - имя проекта (clearml, mlflow) или путь для сохранения результатов  
+- <u>task</u> - тип задачи  
+- <u>name</u> - название эксперимента  
+- <u>close_mosaic</u> - отключить ли мозаичную аугментацию  
+- <u>freeze</u> 8 - количество слоев для заморозки во время обучения  
+- <u>mode</u> train - режим работы (обучение, валидация)  
+- <u>single_cls</u> True - рассматривать ли все классы как один класс  
+- <u>amp</u> False - использовать ли автоматическую смешанную точность (AMP) для обучения  
+- <u>dropout</u> - коэффициент дропаута  
 
-Augmentation params:
-- <u>hsv_h</u> - hue variation range for HSV augmentation
-- <u>hsv_s</u> - saturation variation range for HSV augmentation
-- <u>hsv_v</u> - value (brightness) variation range for HSV augmentation
-- <u>degrees</u> - rotation range for augmentation in degrees
-- <u>translate</u> - translation range for augmentation
-- <u>scale</u> - scaling range for augmentation
-- <u>shear</u> - shear range for augmentation
-- <u>perspective</u> - perspective distortion range for augmentation
-- <u>flipud</u> - probability of flipping the image upside down
-- <u>fliplr</u> - probability of flipping the image left to right
-- <u>mosaic</u> - probability of applying mosaic augmentation
-- <u>mixup</u> - probability of applying mixup augmentation
-- <u>copy_paste</u> - whether to use copy-paste augmentation
-- <u>erasing</u> - probability of applying random erasing augmentation
+Параметры аугментации:
 
-> **Note:** After creating the data and training config, you need to create a trainer config.
+- <u>hsv_h</u> - диапазон изменения оттенка для аугментации HSV  
+- <u>hsv_s</u> - диапазон изменения насыщенности для аугментации HSV  
+- <u>hsv_v</u> - диапазон изменения значения (яркости) для аугментации HSV  
+- <u>degrees</u> - диапазон вращения для аугментации в градусах  
+- <u>translate</u> - диапазон сдвига для аугментации  
+- <u>scale</u> - диапазон масштабирования для аугментации  
+- <u>shear</u> - диапазон сдвига (среза) для аугментации  
+- <u>perspective</u> - диапазон перспективных искажений для аугментации  
+- <u>flipud</u> - вероятность переворачивания изображения вверх ногами  
+- <u>fliplr</u> - вероятность переворачивания изображения слева направо  
+- <u>mosaic</u> - вероятность применения мозаичной аугментации  
+- <u>mixup</u> - вероятность применения аугментации mixup  
+- <u>copy_paste</u> - использовать ли аугментацию копирования-вставки  
+- <u>erasing</u> - вероятность применения случайного стирания для аугментации  
 
-<h3 id="subsection3">Trainer Config</h3>
+> **Note:** После создания конфига модели и данных - необходимо создать кофиг трейнера.
+
+<h3 id="subsection3">Настройка конфига трейнера</h3>
 
 ```yaml
 experiment_name: FULL_exp_1
@@ -196,84 +189,67 @@ yolo_settings_update:
   clearml: True
   mlflow: False
 ```
+> **Note:** Пути указываются относительно корня проекта
 
-Where:
+Где:
 - <u>experiment_name</u> - name of experiment
-- <u>cfg_model_path</u> - cfg to [model config](#subsection1)
-- <u>cfg_data_path</u> - cfg to [data config](#subsection2)
-- <u>pretrained_path</u> - used for finetuned training
-- <u>cfg_mlflow</u> - mlflow config
-  - <u>mlflow_tracking_uri</u> - mlflow tracking uri
-- <u>path_save_res_nadirs</u> - if we use nadirs
-- <u>debug_config</u> - debug config
-  - <u>each_epoch</u> - go to callback each n epoch
-  - <u>predictor_model_base_path</u> - base model
-  - <u>conf</u> - threshold predict
-  - <u>iou</u> - max iou
-  - <u>path_with_test_images</u> - path to test images
-  - <u>agnostic_nms</u> - use agnostic nms
-  - <u>max_det</u> - max objects detect per image
-  - <u>imgsz</u> - image size
-  - <u>show_labels</u> - show labels predict
-  - <u>show_conf</u> - show conf predict
-  - <u>show_boxes</u> - show boxes predict
-  - <u>line_width</u> - line width boxes
-  - <u>augment</u> - use augment
-  - <u>retina_masks</u> - retina mask for for better quality
-- <u>yolo_settings_update</u> - update setting config before train
-  - <u>clearml</u> - use or not
-  - <u>mlflow</u> - use or not
+- <u>cfg_model_path</u> - путь к  [model config](#subsection1) относительно корня проекта
+- <u>cfg_data_path</u> - путь к [data config](#subsection2) относительно корня проекта
+- <u>pretrained_path</u> - путь к предобученным весам относительно корня проекта
+- <u>cfg_mlflow</u> - конфиг mlflow
+
+- <u>path_save_res_nadirs</u> - использование разных углов изображения
+- <u>debug_config</u> - дебаг конфиг
+  - <u>each_epoch</u> - запускать debug каждые n эпох
+  - <u>predictor_model_base_path</u> - базовая модель
+  - <u>conf</u> - порог вероятности для предсказания
+  - <u>iou</u> - максимально значения пересечения боксов предсказаний
+  - <u>path_with_test_images</u> - путь к тестовым изображениям
+  - <u>max_det</u> - максимальное количество предсказаний на одно изображение
+  - <u>imgsz</u> - размер изображения
+  - <u>show_labels</u> - флаг для отображения классов
+  - <u>show_conf</u> - флаг для отображения вероятностей классов
+  - <u>show_boxes</u> - флаг для отображения рамок bbox
+  - <u>line_width</u> - толщина линий bbox
+  - <u>retina_masks</u> - использование retina mask для лучшего качества
+- <u>yolo_settings_update</u> - обновление настроек YOLOv8
+  - <u>clearml</u> - флаг использования
+  - <u>mlflow</u> - флаг использования
 
 
-> **Note:** Config claerml changes occur through the file `~/claerml.conf`
+> **Note:** Конфиг clearml создается в папке `~/claerml.conf`
 
-> **Note:** You can add your custom callback in `src/callbacks/{callbacks.py, debug.py}`
 
-<h3 id="subsection3">Start Train</h3>
-To start your train use script:
+<h3 id="subsection3">Запуск обучения</h3>
 
 ```python train.py --trainer_config <path_to_trainer_config>```
 
-## Inference build-in YOLOv8
+## Инференс YOLOv8
 
-### Overview
-This script, predict.py, is designed to perform object detection using the YOLOv8 model. It takes an image as input, runs the YOLOv8 model to detect objects, and saves the results, including segmentations if specified. This script is useful for running inference on images using a pre-trained YOLOv8 model.
-### Example usage
-The script can be run from the command line with various arguments to specify the model path, image path, and other YOLO configurations.
+### Обзор
+Скрипт predict.py предназначен для выполнения обнаружения объектов с использованием модели YOLOv8. Он принимает изображение в качестве входных данных, запускает модель YOLOv8 для обнаружения объектов и сохраняет результаты, включая сегментации, если это указано. Этот скрипт полезен для выполнения инференса на изображениях с использованием предварительно обученной модели YOLOv8.
+### Пример использования
+Скрипт можно запускать из командной строки с различными аргументами для указания пути к модели, пути к изображению и других параметров конфигурации YOLO.
 
-Command Line Arguments:
 
-    --best_model_path: Path to the pre-trained YOLOv8 model weights.
-    --path_image_predict: Path to the image on which to run the predictions.
-    --save_results_path: Directory where the results will be saved.
-    --data_experiment_name: Name of the experiment, used for naming the results directory.
-    --save_segmentations_json: Boolean indicating whether to save the segmentations as a JSON file.
-    YOLO configuration arguments:
-        --yolo_conf: Confidence threshold for the YOLOv8 model.
-        --yolo_iou: Intersection over Union threshold for the YOLOv8 model.
-        --yolo_agnostic_nms: Boolean indicating whether to use agnostic NMS.
-        --yolo_max_det: Maximum number of detections.
-        --yolo_imgsz: Image size for the YOLOv8 model.
-        --yolo_show_labels: Boolean indicating whether to show labels on the detected objects.
-        --yolo_show_conf: Boolean indicating whether to show confidence scores on the detected objects.
-        --yolo_show_boxes: Boolean indicating whether to show bounding boxes on the detected objects.
-        --yolo_line_width: Line width for the bounding boxes.
-        --yolo_augment: Boolean indicating whether to use data augmentation during prediction.
-        --yolo_retina_masks: Boolean indicating whether to use retina masks.
+    --best_model_path: путь к весам предварительно обученной модели yolov8.
+    --path_image_predict: путь к изображению, на котором будут выполняться предсказания.
+    --save_results_path: директория, в которой будут сохранены результаты.
+    --data_experiment_name: название эксперимента, используется для именования директории с результатами.
+    --save_segmentations_json: логическое значение, указывающее, сохранять ли сегментации в файл json.
+      аргументы конфигурации yolov8:
+        --yolo_conf: порог уверенности для модели yolov8.
+        --yolo_iou: порог пересечения по площади (iou) для модели yolov8.
+        --yolo_agnostic_nms: логическое значение, указывающее, использовать ли агностическую nms.
+        --yolo_max_det: максимальное количество детекций.
+        --yolo_imgsz: размер изображения для модели yolov8.
+        --yolo_show_labels: логическое значение, указывающее, отображать ли метки на обнаруженных объектах.
+        --yolo_show_conf: логическое значение, указывающее, отображать ли показатели уверенности на обнаруженных объектах.
+        --yolo_show_boxes: логическое значение, указывающее, отображать ли рамки на обнаруженных объектах.
+        --yolo_line_width: ширина линии для рамок.
+        --yolo_augment: логическое значение, указывающее, использовать ли аугментацию данных во время предсказания.
+        --yolo_retina_masks: логическое значение, указывающее, использовать ли маски ретины.
 
 ```python src/inference/predict.py --best_model_path path/to/model_weights.pt --path_image_predict path/to/image.jpg --save_results_path path/to/save/results --data_experiment_name my_experiment --save_segmentations_json True --yolo_conf 0.4 --yolo_iou 0.5 --yolo_agnostic_nms True --yolo_max_det 2000 --yolo_imgsz 1024 --yolo_show_labels False --yolo_show_conf False --yolo_show_boxes False --yolo_line_width 1 --yolo_augment True --yolo_retina_masks True```
 
-## Export
-
-### Overview
-The script is designed to take a trained YOLO model and export it to a specified format (either ONNX or OpenVino). The script is configurable via command-line arguments.
-### Example usage
-The script can be run from the command line with various arguments to specify the model path, image path, and other YOLO configurations.
-
-Command Line Arguments:
-
-    --model_path: Path to the trained YOLO model
-    --mode: Export mode, either onnx or openvino (default: onnx).
-    --data_input_shape: Input shape for the model (default: 1024).
-
-```python src/export/export_models.py --model_path <path_to_model> --mode <export_mode> --data_input_shape <input_shape>```
+## ClearML - сервер для отслеживания результатов экспериментов
