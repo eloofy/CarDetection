@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  car_detection_app:
+    build:
+      context: .
+    container_name: car_detection_app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    shm_size: "1g"
+    volumes:
+      - "./CARS/:/opt/app/CARS/"
+      - "./configs/:/opt/app/configs/"
+      - "./data/:/opt/app/data/"
+    entrypoint: ["/opt/app/entrypoint.sh"]

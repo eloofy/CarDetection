@@ -1,0 +1,12 @@
+.git
+__pycache__
+*.log
+*.tmp
+node_modules
+build/
+dist/
+.venv
+
+CARS
+data
+configs
