@@ -70,7 +70,11 @@ class YOLOTrainer:  # noqa: WPS230
         :return dict: Loaded model configuration as a dictionary.
         """
         with open(model_cfg_file, "r") as file_cfg:
-            return yaml.safe_load(file_cfg)
+            settings = yaml.safe_load(file_cfg)
+            data = settings.get("data")
+            if data and not Path(data).is_absolute():
+                settings["data"] = PROJECT_DEFAULT_PATH / data
+            return settings
 
     def _val_metrics_nadir(self):
         """
@@ -134,6 +138,7 @@ class YOLOTrainer:  # noqa: WPS230
         Train a YOLO model.
 
         """
+        print(f"{model_config=}")
         self.model.train(**model_config["training_params"], classes=self.config_trainer.need_classes)
 
         if self.save_nadir_results_path:
