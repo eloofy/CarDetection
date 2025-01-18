@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   car_detection_app:
     build:
