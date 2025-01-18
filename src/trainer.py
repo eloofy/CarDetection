@@ -138,7 +138,6 @@ class YOLOTrainer:  # noqa: WPS230
         Train a YOLO model.
 
         """
-        print(f"{model_config=}")
         self.model.train(**model_config["training_params"], classes=self.config_trainer.need_classes)
 
         if self.save_nadir_results_path:
