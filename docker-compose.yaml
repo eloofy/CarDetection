@@ -3,6 +3,7 @@ services:
     build:
       context: .
     container_name: car_detection_app
+    image: car_detection_app
     deploy:
       resources:
         reservations:
