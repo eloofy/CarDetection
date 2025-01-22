@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.11
 
 RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive \
@@ -20,6 +20,7 @@ COPY scripts /opt/app/scripts
 COPY src /opt/app/src
 COPY train.py /opt/app/train.py
 COPY yolov8n.pt /opt/app/yolov8n.pt
+#COPY configs/clearml.conf /root/clearml.conf
 
 COPY entrypoint.sh /opt/app/entrypoint.sh
 

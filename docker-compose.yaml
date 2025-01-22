@@ -11,6 +11,7 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    tty: true
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
@@ -19,4 +20,5 @@ services:
       - "./CARS/:/opt/app/CARS/"
       - "./configs/:/opt/app/configs/"
       - "./data/:/opt/app/data/"
+      - "./configs/clearml.conf:/root/clearml.conf"
     entrypoint: ["/opt/app/entrypoint.sh"]
