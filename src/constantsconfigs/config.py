@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Union, List, Optional
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, model_validator, field_validator
 
 from src.constantsconfigs.constants import PROJECT_DEFAULT_PATH
 
@@ -62,6 +62,15 @@ class YoloSettingsUpdate(_BaseConfig):
 
     clearml: bool
     mlflow: bool
+    data_path: Path
+
+    @field_validator("data_path")
+    @classmethod
+    def check_path(cls, value: str | Path) -> Path:
+        path = Path(value)
+        if not path.is_absolute():
+            path = PROJECT_DEFAULT_PATH / path
+        return path
 
 
 class MlflowConfig(_BaseConfig):
