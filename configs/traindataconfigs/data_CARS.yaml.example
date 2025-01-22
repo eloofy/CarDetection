@@ -1,0 +1,8 @@
+# Если путь относительный, то ожидается относительно директории с датасетами. Смотреть data_path
+#   в yolo_settings_update.yaml
+path: "./DETRAC_Upload"
+train: 'images/train'
+val: 'images/val'
+
+nc: 4
+names: ["car", "bus", "van", "other"]

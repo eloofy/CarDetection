@@ -1,0 +1,13 @@
+experiment_name: cars_exp_1
+cfg_model_path: configs/trainmodelconfig/CARS/model_cfg_CARS_exp_1.yaml
+cfg_data_path: configs/traindataconfigs/data_CARS.yaml
+pretrained_path: null
+need_classes: null
+cfg_mlflow:
+  mlflow_tracking_uri: null
+path_save_res_nadirs: null
+debug_config: null
+yolo_settings_update:
+  clearml: True
+  mlflow: False
+  data_path: "./data"
