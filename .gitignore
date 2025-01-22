@@ -15,3 +15,4 @@ makefile
 clearml.conf
 data_CARS.yaml
 trainer_config_cars.yaml
+model_cfg_CARS_exp_1.yaml
