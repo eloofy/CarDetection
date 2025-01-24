@@ -72,6 +72,8 @@ docker compose -f docker-compose.yaml build car_detection_app
 docker compose -f docker-compose.yaml run car_detection_app
 ```
 
+**Не забудьте изменить настройку `device` на `device: cuda` для запуска с gpu**
+
 ##### Для устройств с gpu
 
 ```bash
