@@ -30,9 +30,8 @@ if [ $found -eq 0 ]; then
     .venv/bin/python -m src.datasets.kaggle
 fi
 
-echo -e "\nПроверка прав /opt/app/data/..."
-#chown -R app_user:app_group /opt/app/data/
-chmod -R 777 /opt/app/data/
+echo -e "\nПроверка прав /opt/app/data/... отключена"
+#chmod -R 777 /opt/app/data/
 
 echo -e "\nИнициализация clearml..."
 
