@@ -20,7 +20,6 @@ COPY scripts /opt/app/scripts
 COPY src /opt/app/src
 COPY train.py /opt/app/train.py
 COPY yolov8n.pt /opt/app/yolov8n.pt
-#COPY configs/clearml.conf /root/clearml.conf
 
 COPY entrypoint.sh /opt/app/entrypoint.sh
 
