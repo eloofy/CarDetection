@@ -1,12 +1,98 @@
 # YOLOv8Baseline
 
-## Данные
-1. DETRAC
+## Место на диске
 
-## Установка зависимостей
-```shell
-.\run_install.bat
+Необходимое место может различаться на разных системах.
+
+Рекомендуемое место на диске для хранения для запуска проекта: 40 гб
+(из которых 10 гб — для датасета)
+
+## Предварительные требования
+
+Перед началом работы убедитесь, что на вашем компьютере установлены:
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+Также в проект добавлена интеграция с CLEARML и MLFLOW для отслеживания результатов экспериментов.
+Чтобы отслеживать результаты экспериментов, необходимо зарегистрироваться на [clearml](https://app.clear.ml/dashboard)
+и получить API ключ. Для этого в [настройках профиля](https://app.clear.ml/settings/workspace-configuration) нажмите
+`Create new credentials`.
+
+Полученные настройки вида:
 ```
+api {
+  web_server:https://app.clear.ml/
+  api_server:https://api.clear.ml
+  files_server:https://files.clear.ml
+  credentials {
+    "access_key"="1234567890QWERTYUIOPQWERTYUIOP"
+    "secret_key"="QWERTYUIOPQWERTYUIOP!@#$%^&*()QWE1234567RTYUIOPQWERTYUIOP!@#$%^&*()"
+  }
+}
+```
+
+Необходимо сохранить, чтобы потом вставить в файл `configs/clearml.conf` (смотреть 2 пункт)
+
+
+## Шаги по запуску
+
+### 1. Клонирование репозитория
+Склонируйте репозиторий с приложением:
+```bash
+git clone https://github.com/eloofy/CarDetection.git
+```
+
+### 2. Создание конфигурационных файлов
+
+```bash
+cp configs/traindataconfigs/data_CARS.yaml.example configs/traindataconfigs/data_CARS.yaml
+cp configs/trainerconfigs/trainer_config_cars.yaml.example configs/trainerconfigs/trainer_config_cars.yaml
+cp configs/trainmodelconfig/CARS/model_cfg_CARS_exp_1.yaml.example configs/trainmodelconfig/CARS/model_cfg_CARS_exp_1.yaml
+cp configs/clearml.conf.example configs/clearml.conf
+```
+
+Вставляем в секцию api сохраненные настройки из clearml (смотреть Предварительные требования)
+
+
+### 3. Скачивание датасета
+
+Датасет можно скачать самостоятельно. 
+Иначе он установится автоматически с [kaggle](https://www.kaggle.com/datasets/dtrnngc/ua-detrac-dataset). 
+
+### 4. Запуск приложения
+
+#### Запуск через docker-compose с отображением полосы прогресса
+
+##### Для устройств без gpu
+
+```bash
+docker compose -f docker-compose.yaml build car_detection_app
+```
+```bash
+docker compose -f docker-compose.yaml run car_detection_app
+```
+
+##### Для устройств с gpu
+
+```bash
+docker compose -f docker-compose.yaml -f docker-compose.gpu.yaml build car_detection_app
+```
+```bash
+docker compose -f docker-compose.yaml -f docker-compose.gpu.yaml run car_detection_app
+```
+
+#### Локальный запуск
+
+Необходим установленный python версии 3.10 и выше
+```bash
+pip install poetry
+poetry install
+```
+
+```bash
+python -m train
+```
+
 
 Организация проекта
 ------------
@@ -36,7 +122,7 @@
 <h3 id="subsection1">Настройка конфига данных</h3>
 
 ```yaml
-path: /Users/avlasov/PycharmProjects/CarDetection/data/DETRAC_Upload
+path: ./DETRAC_Upload
 train: 'images/train'
 val: 'images/val'
 
@@ -60,7 +146,7 @@ training_params:
   # Train params
 
   model: yolov8n.pt # path to model file, i.e. yolov8n.pt, yolov8n.yaml
-  data: /Users/avlasov/PycharmProjects/CarDetection/configs/traindataconfigs/data_CARS.yaml # path to data file, i.e. coco128.yaml
+  data: ./configs/traindataconfigs/data_CARS.yaml  # path to data file, i.e. coco128.yaml
   imgsz: 640 # size of input images as integer
   epochs: 5 # number of epochs to train for
   patience: 5 # epochs to wait for no observable improvement for early stopping of training
