@@ -7,7 +7,7 @@ training_params:
   imgsz: 640 # size of input images as integer
   epochs: 5 # number of epochs to train for
   patience: 5 # epochs to wait for no observable improvement for early stopping of training
-  batch: -1 # number of images per batch (-1 for AutoBatch)
+  batch: 6 # number of images per batch (-1 for AutoBatch)
   device: cpu # device to run on, i.e. cuda device=0 or device=0,1,2,3 or device=cpu
   workers: 10 # number of worker threads for data loading (per RANK if DDP)
   optimizer: AdamW # optimizer to use, choices=[SGD, Adam, Adamax, AdamW, NAdam, RAdam, RMSProp, auto]

@@ -138,7 +138,13 @@ class YOLOTrainer:  # noqa: WPS230
         Train a YOLO model.
 
         """
-        print(f"{model_config=}")
+        model_path = Path(model_config["training_params"]["data"])
+        if not model_path.is_absolute():
+            model_path = PROJECT_DEFAULT_PATH / model_path
+        if model_path.exists() and model_path.is_dir() and any(model_path.iterdir()):
+            msg = f"Отсутствуют данные модели в {model_path}"
+            raise FileNotFoundError(msg)
+
         self.model.train(**model_config["training_params"], classes=self.config_trainer.need_classes)
 
         if self.save_nadir_results_path:

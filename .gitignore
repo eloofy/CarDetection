@@ -5,4 +5,14 @@
 /src/inference/results/
 /src/inference/slice_lib/
 /src/export/
+
 makefile
+
+# venv
+.venv
+
+# Configs
+clearml.conf
+data_CARS.yaml
+trainer_config_cars.yaml
+model_cfg_CARS_exp_1.yaml

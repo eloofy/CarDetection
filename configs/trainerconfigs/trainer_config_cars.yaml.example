@@ -10,3 +10,4 @@ debug_config: null
 yolo_settings_update:
   clearml: True
   mlflow: False
+  data_path: "./data"
